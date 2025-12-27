@@ -1,5 +1,3 @@
-#define TCH_WINAPI
-
 #ifdef NDEBUG
     #define print(msg)
 #else

@@ -6,7 +6,6 @@
 */
 #endif
 
-#include <windows.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -63,7 +62,7 @@ void change_lang(int lang) {
         write_file_bin(LANG_FILE, APP_ENG_SHORT);
     }
     else if (lang == RU_LANG) {
-        APP_LANG = EN_LANG;
+        APP_LANG = RU_LANG;
         write_file_bin(LANG_FILE, APP_RUS_SHORT);
     }
 }
