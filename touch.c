@@ -112,20 +112,25 @@ void init_lang_dat() {
 void print_info() {
     if (APP_LANG == EN_LANG) {
         printf(
-        "\n\t\x1b[1m\x1b[33m%s\x1b[0m utility is written by \x1b[1m4lo8ecK\x1b[0m\n"
-        "\t\x1b[1m\x1b[2m------------------------------------\x1b[0m\n"
+        "\n\t\x1b[1;33m%s\x1b[0m utility is written by \x1b[1m4lo8ecK\x1b[0m\n"
+        "\t\x1b[1m\x1b[2m------------INFO-------------\x1b[0m\n"
         "\t\x1b[3mVersion:\x1b[0m\t%d.%d\n"
         "\t\x1b[3mLanguage:\x1b[0m\t%s\n\n"
+        "\n"
+        "\t\x1b[1;33m-h\x1b[0;3m or \x1b[0;1;33m--help\x1b[0;3m for additional information\x1b[0m\n"
         "\n",
         APP_NAME, VERSION_MAJOR, VERSION_MINOR, ui_lang[APP_LANG]
         );
     }
     else if (APP_LANG == RU_LANG) {
         printf(
-        "\n\t\x1b[1m\x1b[33m%s\x1b[0m утилиту написал \x1b[1m4lo8ecK\x1b[0m\n"
-        "\t\x1b[1m\x1b[2m-----------------------------\x1b[0m\n"
+        "\n\t\x1b[1;33m%s\x1b[0m утилиту написал \x1b[1m4lo8ecK\x1b[0m\n"
+        "\n"
+        "\t\x1b[1m\x1b[2m---------ИНФОРМАЦИЯ----------\x1b[0m\n"
         "\t\x1b[3mВерсия:\x1b[0m\t%d.%d\n"
         "\t\x1b[3mЯзык:\x1b[0m\t%s\n"
+        "\n"
+        "\t\x1b[1;33m-h\x1b[0;3m или \x1b[0;1;33m--help\x1b[0;3m для дополнительной информации\x1b[0m\n"
         "\n",
         APP_NAME, VERSION_MAJOR, VERSION_MINOR, ui_lang[APP_LANG]
         );
@@ -136,12 +141,51 @@ void print_version() {
     printf("%s: %d.%d", APP_NAME, VERSION_MAJOR, VERSION_MINOR);
 }
 
-void unknown_option(const char* opt) {
+void print_help() {
+    print_info();
+    
     if (APP_LANG == EN_LANG) {
-        printf("Unknown option \x1b[33m\x1b[3m%s\x1b[0m\n", opt);
+        printf(
+        "\t\x1b[1;2m------------USAGE------------\x1b[0m\n"
+        "\tThe order of arguments is unimportant\n"
+        "\t|> \x1b[33mtouch\x1b[0m \x1b[1m[<filename> ...]\x1b[0m - create new files \x1b[2;3m(count of arguments is unlimited)\x1b[0m\n"
+        "\n\t\x1b[3;1mOptions:\x1b[0m\n"
+        "\t|> \x1b[33mtouch\x1b[0m \x1b[1m[-v | --version] [-i | --info] [-h | --help]\x1b[0m\n"
+        "\t|> \x1b[33mtouch\x1b[0m \x1b[1m[-ru | --russian] [-en | --english]\x1b[0m\n"
+        "\n"
+        "\t\x1b[1m-v | --version\x1b[0m\t- show version\n"
+        "\t\x1b[1m-i | --info\x1b[0m\t- show information\n"
+        "\t\x1b[1m-h | --help\x1b[0m\t- show help \x1b[2;3m(I know, this is useless here)\x1b[0m\n"
+        "\n"
+        "\t\x1b[1m-ru | --russian\x1b[0m\t- set language to \x1b[1;4mRussian\x1b[0m\n"
+        "\t\x1b[1m-en | --english\x1b[0m\t- set language to \x1b[1;4mEnglish\x1b[0m\n"
+        "\n");
     }
     else if (APP_LANG == RU_LANG) {
-        printf("Неизвестная опция \x1b[33m\x1b[3m%s\x1b[0m\n", opt);
+        printf(
+        "\t\x1b[1;2m--------ИСПОЛЬЗОВАНИЕ--------\x1b[0m\n"
+        "\tПорядок аргументов неважен\n"
+        "\t|> \x1b[33mtouch\x1b[0m \x1b[1m[<наименование файла> ...]\x1b[0m - создание файлов \x1b[2;3m(количество аргументов не ограничено)\x1b[0m\n"
+        "\n\t\x1b[3;1mОпции:\x1b[0m\n"
+        "\t|> \x1b[33mtouch\x1b[0m \x1b[1m[-v | --version] [-i | --info] [-h | --help]\x1b[0m\n"
+        "\t|> \x1b[33mtouch\x1b[0m \x1b[1m[-ru | --russian] [-en | --english]\x1b[0m\n"
+        "\n"
+        "\t\x1b[1m-v | --version\x1b[0m\t- показать версию\n"
+        "\t\x1b[1m-i | --info\x1b[0m\t- показать информацию\n"
+        "\t\x1b[1m-h | --help\x1b[0m\t- показать доп. информацию \x1b[2;3m(Знаю-знаю, отображение \x1b[0;2;33mhelp\x1b[0;2;3m здесь уже не нужно, но всё равно, оно здесь по-приколу)\x1b[0m\n"
+        "\n"
+        "\t\x1b[1m-ru | --russian\x1b[0m\t- установить \x1b[1;4mрусский\x1b[0m язык\n"
+        "\t\x1b[1m-en | --english\x1b[0m\t- установить \x1b[1;4mанглийский\x1b[0m язык\n"
+        "\n");
+    }
+}
+
+void unknown_option(const char* opt) {
+    if (APP_LANG == EN_LANG) {
+        printf("Unknown option \x1b[33;3m%s\x1b[0m\nTry \x1b[1;33m-h\x1b[0m or \x1b[1;33m--help\x1b[0m for additional information\n", opt);
+    }
+    else if (APP_LANG == RU_LANG) {
+        printf("Неизвестная опция \x1b[33;3m%s\x1b[0m\nПопробуйте использовать \x1b[1;33m-h\x1b[0m или \x1b[1;33m--help\x1b[0m для доп. информации", opt);
     }
 }
 
@@ -154,6 +198,9 @@ void call_option(const char* option) {
     }
     else if (strcmp(option, INFO_OPT) == 0 || strcmp(option, INFO_OPT_SHORT) == 0) {
         print_info();
+    }
+    else if (strcmp(option, HELP_OPT) == 0 || strcmp(option, HELP_OPT_SHORT) == 0) {
+        print_help();
     }
     else if (strcmp(option, APP_ENG) == 0 || strcmp(option, APP_ENG_SHORT) == 0) {
         change_lang(path_to_exe, EN_LANG);
