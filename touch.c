@@ -2,7 +2,7 @@
 /*
     HIKA-SOFT
     my 'GNU touch' analog 
-    VER - 1.0
+    VER - 1.1
 */
 #endif
 
