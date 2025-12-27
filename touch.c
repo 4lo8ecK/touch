@@ -6,6 +6,7 @@
 */
 #endif
 
+#include <windows.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +20,27 @@
 int APP_LANG = RU_LANG;
 char* ui_lang[] = {"English", "Русский"};
 
-#define LANG_FILE "lang.dat"
+#define LANG_FILE_NAME "lang"
+#define LANG_FILE_EXT "dat"
+
+const char* get_executable_dir(const char* filename, const char* ext) {
+    char* path = (char*)malloc(MAX_PATH);
+    DWORD count = GetModuleFileNameA(NULL, path, MAX_PATH);
+    if (count == 0) {
+        return NULL;
+    }
+
+    char* drive = (char*)malloc(_MAX_DRIVE);
+    char* dir = (char*)malloc(_MAX_DIR);
+    
+    _splitpath_s(path, drive, _MAX_DRIVE, dir, _MAX_DIR, NULL, 0, NULL, 0);
+    _makepath_s(path, MAX_PATH, drive, dir, filename, ext);
+    
+    free(drive);
+    free(dir);
+    
+    return path;
+}
 
 int file_exsist(const char* path) {
     FILE* fl = fopen(path, "r");
@@ -56,21 +77,23 @@ const char* read_file(const char* path) {
     return dat;
 }
 
-void change_lang(int lang) {
+void change_lang(const char* path, int lang) {
     if (lang == EN_LANG) {
         APP_LANG = EN_LANG;
-        write_file_bin(LANG_FILE, APP_ENG_SHORT);
+        write_file_bin(path, APP_ENG_SHORT);
     }
     else if (lang == RU_LANG) {
         APP_LANG = RU_LANG;
-        write_file_bin(LANG_FILE, APP_RUS_SHORT);
+        write_file_bin(path, APP_RUS_SHORT);
     }
 }
 
 void init_lang_dat() {
-
-    if (file_exsist(LANG_FILE)) {
-        const char* dat = read_file(LANG_FILE);
+    const char* path_to_exe = get_executable_dir(LANG_FILE_NAME, LANG_FILE_EXT);
+    print(path_to_exe);
+    if (file_exsist(path_to_exe)) {
+        
+        const char* dat = read_file(path_to_exe);
         if (strcmp(dat, APP_ENG_SHORT) == 0) {
             APP_LANG = EN_LANG;
         }
@@ -78,11 +101,11 @@ void init_lang_dat() {
             APP_LANG = RU_LANG;
         }
         else {
-            change_lang(RU_LANG);
+            change_lang(path_to_exe, RU_LANG);
         }
     }
     else {
-        change_lang(RU_LANG);
+        change_lang(path_to_exe, RU_LANG);
     }
 }
 
@@ -124,6 +147,8 @@ void unknown_option(const char* opt) {
 
 void call_option(const char* option) {
     //
+    const char* path_to_exe = get_executable_dir(LANG_FILE_NAME, LANG_FILE_EXT);
+
     if (strcmp(option, VER_OPT) == 0 || strcmp(option, VER_OPT_SHORT) == 0) {
         print_version();
     }
@@ -131,10 +156,10 @@ void call_option(const char* option) {
         print_info();
     }
     else if (strcmp(option, APP_ENG) == 0 || strcmp(option, APP_ENG_SHORT) == 0) {
-        change_lang(EN_LANG);
+        change_lang(path_to_exe, EN_LANG);
     }
     else if (strcmp(option, APP_RUS) == 0 || strcmp(option, APP_RUS_SHORT) == 0) {
-        change_lang(RU_LANG);
+        change_lang(path_to_exe, RU_LANG);
     }
     else {
         unknown_option(option);
